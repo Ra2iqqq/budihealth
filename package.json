@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@mantine/charts": "^7.11.2",
     "@mantine/core": "^7.11.0",
     "@mantine/dropzone": "^7.11.2",
     "@mantine/hooks": "^7.11.0",
     "@mantine/modals": "^7.11.2",
     "@mui/material": "^6.1.6",
+    "@mui/styled-engine-sc": "^6.1.6",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",
@@ -28,6 +30,7 @@
     "pocketbase": "^0.21.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "styled-components": "^6.1.13",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7"
   },

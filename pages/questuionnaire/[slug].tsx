@@ -1,7 +1,6 @@
 import { MainLayout } from "@/layout/main_layout";
 import { DashboardLayout } from "@/layout/dashboard_layout";
 import { useRouter } from "next/router";
-import OrderDetailModule from "@/modules/order/questuionairedetail";
 
 export default function OrderSlug() {
     const router = useRouter();
@@ -10,7 +9,7 @@ export default function OrderSlug() {
     return (
         <MainLayout title={`Order ${orderID}`}>
             <DashboardLayout>
-                {typeof orderID === 'string' && <OrderDetailModule orderID={orderID} />}
+                <h1>sad</h1>
             </DashboardLayout>
         </MainLayout>
     )
