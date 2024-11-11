@@ -10,8 +10,8 @@ export interface usersTypes {
   updated: string;
   name: string;
   avatar: string;
-  role: string;
   isActive: boolean;
   address: string;
+  gender: string;
   phone_number: number;
 }

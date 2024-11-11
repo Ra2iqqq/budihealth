@@ -40,11 +40,13 @@ export default function Home() {
       "emailVisibility": true,
       "password": password,
       "passwordConfirm": password,
+      "phone_number": phone,
+      "isActive": true,
       "name": name,
-      "phone": phone,
       "gender": gender
     };
 
+    console.log("Pocketbase url :" + process.env.NEXT_PUBLIC_POCKETBASE_BASE_URL)
     console.log(data)
 
     try {
@@ -56,16 +58,16 @@ export default function Home() {
           const login = await pb.collection('users').authWithPassword(username, password);
 
           if (login) {
-            router.push("/home");
+            router.push("/blog");
             setIsLoading(false);
           }
         } catch (error) {
-          setError("Invalid credentials. Please try again.");
+          setError("Invalid crendential. Please try again.");
           setIsLoading(false);
         }
       }
     } catch {
-      setError("Invalid credentials. Please try again.");
+      setError("Invalid crendential. Please try again.");
       setIsLoading(false);
     }
 

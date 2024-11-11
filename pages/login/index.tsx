@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     if (readIsValid()) {
-      router.push('/home');
+      router.push('/blog');
     }
     setIsClient(true);
   }, [router])
