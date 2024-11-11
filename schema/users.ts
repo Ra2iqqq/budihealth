@@ -12,6 +12,7 @@ export interface usersTypes {
   avatar: string;
   isActive: boolean;
   address: string;
+  role: string;
   gender: string;
   phone_number: number;
 }
