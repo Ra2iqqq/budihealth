@@ -29,17 +29,33 @@ export default function Home() {
     const password = e.currentTarget.password.value;
 
     try {
-      const result = await pb.collection('users').authWithPassword(
-        username,
-        password,
-      );
+      // Attempt authentication in the 'users' collection
+      const result = await pb.collection('users').authWithPassword(username, password);
+
       if (result) {
         router.push('/home');
-        setIsLoading(false)
+        setIsLoading(false);
       }
     } catch (err) {
-      setError('Invalid credentials. Please try again.');
-      setIsLoading(false)
+      if (err) {
+        // If user not found or invalid credentials, try 'admins' collection
+        try {
+          const adminResult = await pb.collection('admins').authWithPassword(username, password);
+
+          if (adminResult) {
+            router.push('/blog'); // Redirect to admin dashboard
+            setIsLoading(false);
+          }
+        } catch (adminErr) {
+          // If neither users nor admins can authenticate
+          setError('Invalid credentials. Please try again.');
+          setIsLoading(false);
+        }
+      } else {
+        // Handle other errors (network issues, server errors, etc.)
+        setError('An error occurred. Please try again later.');
+        setIsLoading(false);
+      }
     }
 
     setIsLoading(false)
