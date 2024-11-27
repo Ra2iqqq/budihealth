@@ -1,13 +1,13 @@
 import { MainLayout } from "@/layout/main_layout";
-import { DashboardLayout } from "@/layout/dashboard_layout";
 import StaffModule from "@/modules/staff";
+import { DashboardAdminLayout } from "@/layout/dashboard_admin_layout";
 
 export default function Staff() {
     return (
         <MainLayout title="Staff">
-            <DashboardLayout>
+            <DashboardAdminLayout>
                 <StaffModule />
-            </DashboardLayout>
+            </DashboardAdminLayout>
         </MainLayout>
     )
 }

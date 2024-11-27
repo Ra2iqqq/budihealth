@@ -29,12 +29,13 @@ export default function Home() {
     const password = e.currentTarget.password.value;
 
     try {
-      // Attempt authentication in the 'users' collection
-      const result = await pb.collection('users').authWithPassword(username, password);
-
+      const result = await pb.collection('users').authWithPassword(
+        username,
+        password,
+      );
       if (result) {
-        router.push('/home');
-        setIsLoading(false);
+        router.push('/blog');
+        setIsLoading(false)
       }
     } catch (err) {
       if (err) {
@@ -43,7 +44,7 @@ export default function Home() {
           const adminResult = await pb.collection('admins').authWithPassword(username, password);
 
           if (adminResult) {
-            router.push('/blog'); // Redirect to admin dashboard
+            router.push('/patients'); // Redirect to admin dashboard
             setIsLoading(false);
           }
         } catch (adminErr) {
@@ -60,6 +61,7 @@ export default function Home() {
 
     setIsLoading(false)
   };
+  
 
   if (!isClient) {
     return null;
@@ -105,9 +107,6 @@ export default function Home() {
                   >
                     Submit
                   </Button>
-                  <Link href="/register" className='flex items-center justify-center mt-3 text-blue-600'>
-                    Click for register
-                  </Link>
                 </form>
               </div>
             </div>

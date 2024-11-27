@@ -4,7 +4,10 @@ import { useDisclosure } from '@mantine/hooks';
 import { readRole, readName, readAvatar, logout } from '@/authentication/session';
 import { IconLogout2, IconUsers, IconStack2, IconClipboardList, IconCalendar, IconBrandGoogleAnalytics, IconClipboardData } from '@tabler/icons-react';
 import { useDashboard } from './DashboardContext';
+import { useEffect } from 'react';
+import PocketBase from "pocketbase";
 
+const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_BASE_URL);
 interface DashboardProps {
     children: React.ReactNode;
 }
@@ -15,37 +18,9 @@ export function DashboardAdminLayout({ children }: DashboardProps) {
     const sessionName = readName();
     const { desktopOpened, toggleDesktop } = useDashboard();
 
+    useEffect(() => {if(!pb.authStore.model?.role){router.push("/login")}}, [])
     const navLink = [
-        {
-            href: "/questuionnaire",
-            title: "Questuionnaire",
-            logo: <IconStack2 />,
-            role: ['admin', 'patient', 'installer']
-        },
-        {
-            href: "/heartrate",
-            title: "Heart Rate",
-            logo: <IconCalendar />,
-            role: ['patient', 'installer']
-        },
-        {
-            href: "/blog",
-            title: "Blog",
-            logo: <IconClipboardData />,
-            role: ['admin', 'patient', 'installer']
-        },
-        {
-            href: "/helpline",
-            title: "Helpline",
-            logo: <IconBrandGoogleAnalytics />,
-            role: ['admin', 'patient', 'installer']
-        },
-        {
-            href: "/ai",
-            title: "AI Support",
-            logo: <IconUsers />,
-            role: ['patient', 'installer']
-        },
+
         {
             href: "/patients",
             title: "Patients",

@@ -4,6 +4,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { readRole, readName, readAvatar, logout } from '@/authentication/session';
 import { IconLogout2, IconUsers, IconStack2, IconClipboardList, IconCalendar, IconBrandGoogleAnalytics, IconClipboardData } from '@tabler/icons-react';
 import { useDashboard } from './DashboardContext';
+import { AudioLines, Headset, HeartPulse } from 'lucide-react';
 
 interface DashboardProps {
     children: React.ReactNode;
@@ -25,7 +26,7 @@ export function DashboardLayout({ children }: DashboardProps) {
         {
             href: "/heartrate",
             title: "Heart Rate",
-            logo: <IconCalendar />,
+            logo: <HeartPulse />,
             role: ['patient', 'installer']
         },
         {
@@ -37,28 +38,16 @@ export function DashboardLayout({ children }: DashboardProps) {
         {
             href: "/helpline",
             title: "Helpline",
-            logo: <IconBrandGoogleAnalytics />,
+            logo: <Headset />,
             role: ['admin', 'patient', 'installer']
         },
         {
             href: "/ai",
             title: "AI Support",
-            logo: <IconUsers />,
+            logo: <AudioLines/>,
             role: ['patient', 'installer']
         },
-        {
-            href: "/patients",
-            title: "Patients",
-            logo: <IconUsers />,
-            role: ['admin']
-        },
 
-        {
-            href: "/analytic",
-            title: "Analytic",
-            logo: <IconClipboardList />,
-            role: ['admin']
-        },
     ]
 
     // const [opened, { toggle }] = useDisclosure();

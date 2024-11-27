@@ -1,13 +1,13 @@
 import { MainLayout } from "@/layout/main_layout";
-import { DashboardLayout } from "@/layout/dashboard_layout";
-import AnalyticModule from "@/modules/analytic";
+import AnalyticModule from "@/modules/analytic"
+import { DashboardAdminLayout } from "@/layout/dashboard_admin_layout";
 
 export default function Analytic() {
     return (
         <MainLayout title="Analytic">
-            <DashboardLayout>
+            <DashboardAdminLayout>
                 <AnalyticModule />
-            </DashboardLayout>
+            </DashboardAdminLayout>
         </MainLayout>
     )
 }
