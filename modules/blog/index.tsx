@@ -1,15 +1,83 @@
-import { BarChart } from '@mantine/charts';
 import { posts } from './data.index';
 import { ArrowRight } from 'lucide-react';
-import createClient from '@/utils/pocketbase/api';
+import {Modal, Paper, TextInput, Fieldset, Loader, Group, Space, Text } from "@mantine/core";
 import { Button } from '@/components/ui/button';
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { IconUpload, IconX, IconPhoto } from "@tabler/icons-react";
+import {useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
+import { usersTypes } from "@/schema/users";
+import createClient from '@/utils/pocketbase/api';
 
-export default function BlogModule() {
+export default function OrderModule() {
   const pb = createClient();
-  const userRole = pb.authStore.model?.role;
+  const userRole = pb.authStore.model?.role;  
+  const [opened, setOpened] = useState(false);
 
   return (
     <>
+<Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        title="Edit Staff"
+        centered
+        closeOnClickOutside={false}
+        size="xl"
+        radius={10}
+      >
+          <div className="flex flex-col md:flex-row md:space-x-10 space-y-5 md:space-y-0">
+            <Paper shadow="xl" radius="lg" withBorder p="xl" className="flex-2 md:w-1/2 space-y-2">
+              <div className="flex flex-col space-y-5">
+                <Fieldset legend="Personal Information">
+                  <TextInput label="Title" name="inTitle" required />
+                  <TextInput label="Name" name="inName" required />
+                  <TextInput label="Password" name="inPassword" type="password" required />
+                  <TextInput label="Confirm Password" name="inPasswordConfirm" type="password" required />
+                  <TextInput label="Role" name="inRole" required />
+                </Fieldset>
+              </div>
+            </Paper>
+
+            <Paper shadow="xl" radius="lg" withBorder p="xl" className="flex-2 md:w-1/2 space-y-2">
+              <div className="flex flex-col space-y-5">
+                <Text size="xl" inline>
+                  Drag images here or click to select files
+                </Text>
+                <Text size="sm" c="dimmed" inline mt={7}>
+                  Attach as many files as you like, each file should not exceed 10mb
+                </Text>
+                <Dropzone
+                  onDrop={(files) => console.log("accepted files", files)}
+                  onReject={(files) => console.log("rejected files", files)}
+                  maxSize={10 * 1024 ** 2}
+                  accept={IMAGE_MIME_TYPE}
+                >
+                  <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: "none" }}>
+                    <Dropzone.Accept>
+                      <IconUpload style={{ width: "52px", height: "52px", color: "#3b82f6" }} stroke={1.5} />
+                    </Dropzone.Accept>
+                    <Dropzone.Reject>
+                      <IconX style={{ width: "52px", height: "52px", color: "#f87171" }} stroke={1.5} />
+                    </Dropzone.Reject>
+                    <Dropzone.Idle>
+                      <IconPhoto style={{ width: "52px", height: "52px", color: "#6b7280" }} stroke={1.5} />
+                    </Dropzone.Idle>
+                  </Group>
+                </Dropzone>
+              </div>
+            </Paper>
+          </div>
+
+          <Space h="md" />
+          <Group gap={20} justify="flex-end">
+            <Button onClick={() => setOpened(false)} variant="outline" color="red">
+              Cancel
+            </Button>
+            <Button type="submit">Save</Button>
+          </Group>
+      </Modal>
+
       <section className="pt-5">
         <div className="container flex flex-col items-center gap-6 lg:px-16">
           <div className="text-center">
@@ -27,7 +95,7 @@ export default function BlogModule() {
               <ArrowRight className="ml-2 size-4" />
             </Button>
           </div>
-          {userRole === 'admin' && <Button className='ml-auto'>Add article</Button>}
+          {userRole === 'admin' && <Button className='ml-auto' onClick={() => setOpened(true)}>Add article</Button>}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
             {posts.map((post) => (
               <a

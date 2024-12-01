@@ -6,7 +6,6 @@ import {
   Loader,
   TextInput,
   NativeSelect,
-  FileInput,
   Text,
   Pagination,
   Paper,
@@ -86,37 +85,6 @@ export default function OrderModule() {
     );
   }
 
-  const handleSubmitCreateUser = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-
-    formData.append("username", e.currentTarget.inUsername.value);
-    formData.append("name", e.currentTarget.inName.value);
-    formData.append("password", e.currentTarget.inPassword.value);
-    formData.append("passwordConfirm", e.currentTarget.inPassword.value);
-    formData.append("role", e.currentTarget.inRole.value);
-    formData.append("isActive", "true");
-
-    // Get the file input element
-    const fileInput = e.currentTarget.inAvatar as HTMLInputElement;
-    if (fileInput.files && fileInput.files[0]) {
-      formData.append("avatar", fileInput.files[0]);
-    }
-
-    try {
-      const result = await createUser(formData);
-      if (result) {
-        router.push("/staff/" + result.id);
-      } else {
-        console.error("Failed to create user");
-      }
-    } catch (error) {
-      console.error("Error creating order:", error);
-    }
-  };
   const openDeleteModal = () =>
     modals.openConfirmModal({
       title: "Delete your profile",
@@ -147,41 +115,17 @@ export default function OrderModule() {
         radius={10}
       >
         <div className="flex flex-col md:flex-row md:space-x-10 space-y-5 md:space-y-0">
-          <Paper
-            shadow="xl"
-            radius="lg"
-            withBorder
-            p="xl"
-            className="flex-2 md:w-1/2 space-y-2"
-          >
-            <div className="flex flex-col space-y-5">
-              <div className="flex flex-row">
-                <div className="ml-5">
-                  <Fieldset legend="Staff information">
-                    <TextInput label="Full Name :" />
-                    <TextInput label="Email :" />
-                    <TextInput label="Staff Id :" />
-                    <TextInput label="Address :" />
-                    <TextInput label="Phone :" />
-                  </Fieldset>
-                </div>
-                <div className="ml-5">
-                  <Fieldset legend="Staff Details">
-                    <NativeSelect label="Role:" data={["Admin", "Staff", "Installer"]} />
-                    <TextInput label="Created By :" />
-                    <TextInput label="Update Progress :" />
-                    <Text >Status :</Text>
-                    <Radio.Group name="status">
-                      <Group mt="xs">
-                        <Radio value="active" label="Active" />
-                        <Radio value="inactive" label="Inactive" />
-                      </Group>
-                    </Radio.Group>
-                  </Fieldset>
-                </div>
+        <Paper shadow="xl" radius="lg" withBorder p="xl" className="flex-2 md:w-1/2 space-y-2">
+              <div className="flex flex-col space-y-5">
+                <Fieldset legend="Personal Information">
+                  <TextInput label="Title" name="inTitle" required />
+                  <TextInput label="Name" name="inName" required />
+                  <TextInput label="Password" name="inPassword" type="password" required />
+                  <TextInput label="Confirm Password" name="inPasswordConfirm" type="password" required />
+                  <TextInput label="Role" name="inRole" required />
+                </Fieldset>
               </div>
-            </div>
-          </Paper>
+            </Paper>
           <Paper
             shadow="xl"
             radius="lg"
@@ -259,11 +203,11 @@ export default function OrderModule() {
         <div className="flex items-center justify-between gap-x-3">
           <div className="flex gap-x-3 items-center">
             <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-              Patients list
+              ALL USERS
             </h2>
 
             <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-              {totalItems} staffs
+              {totalItems} Users
             </span>
             <h3>Role :</h3>
             <NativeSelect
@@ -271,7 +215,7 @@ export default function OrderModule() {
               onChange={(e) => setRole(e.currentTarget.value)}
               data={[
                 { label: "All", value: "" },
-                { label: "Patient", value: "patient" },
+                { label: "Patient", value: "user" },
                 { label: "Admin", value: "admin" },
               ]}
               className="w-fit"
@@ -355,13 +299,6 @@ export default function OrderModule() {
                         </button>
                       </th>
 
-                      <th
-                        scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                      >
-                        Create at
-                      </th>
-
                       <th scope="col" className="relative py-3.5 px-4">
                         <span className="sr-only">Edit</span>
                       </th>
@@ -409,9 +346,6 @@ export default function OrderModule() {
                         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                           {Array.isArray(staff.role) ? staff.role.join(', ') : staff.role}
                         </td>
-                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {formatDate(staff.created)}
-                        </td>
                         <td className="px-4 py-4 text-sm whitespace-nowrap">
                           <div className="flex items-center gap-x-6">
                             <button onClick={openDeleteModal} className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none" title="Delete">
@@ -449,8 +383,3 @@ export default function OrderModule() {
     </main>
   );
 }
-
-const formatDate = (dateString: string) => {
-  const date = parseISO(dateString);
-  return format(date, "PPP");
-};

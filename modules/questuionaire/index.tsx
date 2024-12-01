@@ -2,11 +2,8 @@ import { Button, Modal, Loader, TextInput, NativeSelect, Pagination, Alert } fro
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
-import { fetchOrders } from '@/api/order/fetchOrders';
 import { format, parseISO } from 'date-fns';
-import { CreateOrderInterface, createOrder } from '@/api/order/createOrder';
 import { ordersTypes } from '@/schema/orders';
-import { readId, readRole } from '@/authentication/session';
 import createClient from '@/utils/pocketbase/api';
 
 export default function QuestuinaireModule() {
