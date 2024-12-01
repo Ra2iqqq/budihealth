@@ -1,6 +1,5 @@
 import { Book, Menu, Sunset, Trees, Zap } from 'lucide-react';
 import Link from 'next/link';
-
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Sheet,
@@ -345,7 +344,6 @@ export default function Home() {
         ))}
       </div>
     </section>
-
     </>
   );
 

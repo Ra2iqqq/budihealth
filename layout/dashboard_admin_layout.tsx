@@ -2,10 +2,11 @@ import { AppShell, Burger, Group, Divider, NavLink, Avatar, Button, ActionIcon }
 import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 import { readRole, readName, readAvatar, logout } from '@/authentication/session';
-import { IconLogout2, IconUsers, IconStack2, IconClipboardList, IconCalendar, IconBrandGoogleAnalytics, IconClipboardData } from '@tabler/icons-react';
+import { IconClipboardData, IconLogout2, IconStack2, IconUsers } from '@tabler/icons-react';
 import { useDashboard } from './DashboardContext';
 import { useEffect } from 'react';
 import PocketBase from "pocketbase";
+import { ChartNoAxesCombined, Headset } from 'lucide-react';
 
 const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_BASE_URL);
 interface DashboardProps {
@@ -31,8 +32,26 @@ export function DashboardAdminLayout({ children }: DashboardProps) {
         {
             href: "/analytic",
             title: "Analytic",
-            logo: <IconClipboardList />,
+            logo: <ChartNoAxesCombined />,
             role: ['admin']
+        },
+        {
+            href: "/questuionnaire",
+            title: "Questuionnaire",
+            logo: <IconStack2 />,
+            role: ['admin', 'user', ]
+        },
+        {
+            href: "/blog",
+            title: "Blog",
+            logo: <IconClipboardData />,
+            role: ['admin', 'user', ]
+        },
+        {
+            href: "/helpline",
+            title: "Helpline",
+            logo: <Headset />,
+            role: ['admin', 'user', ]
         },
     ]
 

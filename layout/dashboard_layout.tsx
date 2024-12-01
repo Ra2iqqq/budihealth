@@ -2,7 +2,7 @@ import { AppShell, Burger, Group, Divider, NavLink, Avatar, Button, ActionIcon }
 import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 import { readRole, readName, readAvatar, logout } from '@/authentication/session';
-import { IconLogout2, IconUsers, IconStack2, IconClipboardList, IconCalendar, IconBrandGoogleAnalytics, IconClipboardData } from '@tabler/icons-react';
+import { IconLogout2, IconStack2, IconClipboardData } from '@tabler/icons-react';
 import { useDashboard } from './DashboardContext';
 import { AudioLines, Headset, HeartPulse } from 'lucide-react';
 
@@ -21,31 +21,31 @@ export function DashboardLayout({ children }: DashboardProps) {
             href: "/questuionnaire",
             title: "Questuionnaire",
             logo: <IconStack2 />,
-            role: ['admin', 'patient', 'installer']
+            role: ['admin', 'user',]
         },
         {
             href: "/heartrate",
             title: "Heart Rate",
             logo: <HeartPulse />,
-            role: ['patient', 'installer']
+            role: ['user', ]
         },
         {
             href: "/blog",
             title: "Blog",
             logo: <IconClipboardData />,
-            role: ['admin', 'patient', 'installer']
+            role: ['admin', 'user', ]
         },
         {
             href: "/helpline",
             title: "Helpline",
             logo: <Headset />,
-            role: ['admin', 'patient', 'installer']
+            role: ['admin', 'user', ]
         },
         {
             href: "/ai",
             title: "AI Support",
             logo: <AudioLines/>,
-            role: ['patient', 'installer']
+            role: ['user', ]
         },
 
     ]
