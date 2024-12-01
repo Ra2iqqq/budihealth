@@ -27,32 +27,30 @@ export function DashboardLayout({ children }: DashboardProps) {
             href: "/heartrate",
             title: "Heart Rate",
             logo: <HeartPulse />,
-            role: ['user', ]
+            role: ['user',]
         },
         {
             href: "/blog",
             title: "Blog",
             logo: <IconClipboardData />,
-            role: ['admin', 'user', ]
+            role: ['admin', 'user',]
         },
         {
             href: "/helpline",
             title: "Helpline",
             logo: <Headset />,
-            role: ['admin', 'user', ]
+            role: ['admin', 'user',]
         },
         {
             href: "/ai",
             title: "AI Support",
-            logo: <AudioLines/>,
-            role: ['user', ]
+            logo: <AudioLines />,
+            role: ['user',]
         },
 
     ]
 
-    // const [opened, { toggle }] = useDisclosure();
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
-    // const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
     return (
         <>
@@ -77,12 +75,12 @@ export function DashboardLayout({ children }: DashboardProps) {
                         <div className='flex-grow'>
                             {navLink.map((nav, index) => (
                                 // nav.role.includes(sessionRole) && (
-                                    <NavLink
-                                        key={index}
-                                        label={nav.title}
-                                        leftSection={nav.logo}
-                                        onClick={() => { router.push(nav.href) }}
-                                    />
+                                <NavLink
+                                    key={index}
+                                    label={nav.title}
+                                    leftSection={nav.logo}
+                                    onClick={() => { router.push(nav.href) }}
+                                />
                                 // )
                             ))}
                         </div>
