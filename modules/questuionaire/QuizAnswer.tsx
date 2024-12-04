@@ -44,6 +44,12 @@ export default function QuizAnswerModule({ quizID }: { quizID: any }) {
             return score + (selectedAnswers[question.id] === question.correctAnswer ? 1 : 0)
         }, 0)
     }
+    const getMentalHealthLevel = (combinedScore: number) => {
+        if (combinedScore <= 9) return "Minimal Anxiety/Depression";
+        if (combinedScore <= 19) return "Mild Anxiety/Depression";
+        if (combinedScore <= 29) return "Moderate Anxiety/Depression";
+        return "Severe Anxiety/Depression";
+      };
 
     if (showResults) {
         const score = calculateScore()
@@ -54,6 +60,9 @@ export default function QuizAnswerModule({ quizID }: { quizID: any }) {
                     <p className="text-xl text-center mb-6">
                         You scored {score} out of {questions.length}
                     </p>
+                    <p className="text-xl text-center mb-6">
+                        You are in the {getMentalHealthLevel(score)} level
+                    </p>
                     <button
                         onClick={() => {
                             setShowResults(false)
@@ -62,7 +71,7 @@ export default function QuizAnswerModule({ quizID }: { quizID: any }) {
                         }}
                         className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
                     >
-                        Restart Quiz
+                        Restart Question
                     </button>
                 </div>
             </div>

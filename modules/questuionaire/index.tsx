@@ -45,69 +45,11 @@ export default function QuestuinaireModule() {
 
     return (
         <main className="min-h-[calc(100vh-112px) space-y-5">
-            <Modal
-                opened={opened}
-                onClose={close}
-                title="Create order"
-                overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-                centered
-                closeOnClickOutside={false}
-            >
-                <form onSubmit={handleSubmit} className='space-y-5'>
-                    <TextInput
-                        required
-                        label="Client name"
-                        placeholder="Input placeholder"
-                        name='client_name'
-                    />
-                    <TextInput
-                        required
-                        label="address"
-                        placeholder="Input placeholder"
-                        name='client_address'
-                    />
-                    <NativeSelect
-                        required
-                        label="Type"
-                        data={[
-                            { label: 'Measurement', value: '1' },
-                            { label: 'NonMeasurement', value: '2' }
-                        ]}
-                        name='order_type'
-                    />
-                    <NativeSelect
-                        required
-                        label="Installation type"
-                        data={[
-                            { label: 'Installation', value: 'installation' },
-                            { label: 'Pick up', value: 'pick up' },
-                            { label: 'Postage', value: 'postage' },
-                        ]}
-                        name='installation_type'
-                    />
-                    <NativeSelect
-                        required
-                        label="Client source"
-                        data={[
-                            { label: 'Media social', value: 'social media' },
-                            { label: 'Whatsapp', value: 'whatsapp' },
-                            { label: 'Youtube', value: 'youtube' },
-                            { label: 'Website', value: 'website' },
-                            { label: 'Panggilan Telefon', value: 'phone call' },
-                            { label: 'Others', value: 'others' }
-                        ]}
-                        name='client_source'
-                    />
-                    {errorMsg && <Alert variant="filled" color="red" title="Error message">{errorMsg}</Alert>}
-                    <Button type='submit'>Create</Button>
-                </form>
-            </Modal>
-
             <section className="container px-4 mx-auto">
                 <div className="flex items-center justify-between gap-x-3">
                     <div className='flex gap-x-3 items-center'>
                         <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-                            Orders
+                            Question
                         </h2>
 
 

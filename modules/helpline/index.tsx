@@ -1,12 +1,12 @@
-import { BarChart } from '@mantine/charts';
-import { Button, Group } from '@mantine/core';
+import React from "react";
+import Helpline from "./components.Helpline";
 
-export default function HelplineModule() {
+function App() {
   return (
-    <>
-       <main className="min-h-[calc(100vh-112px)] bg-gray-500">
-            <h1>Helpline</h1>
-        </main>
-    </>
+    <div className= "bg-gray-100 min-h-screen flex items-center justify-center">
+      <Helpline />
+    </div>
   );
 }
+
+export default App;

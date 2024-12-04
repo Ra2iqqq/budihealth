@@ -90,10 +90,6 @@ export default function OrderModule() {
             <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
               Mental health refers to our emotional, psychological, and social well-being. It affects how we think, feel, and behave in daily life, influencing how we handle stress, relate to others, and make decisions. Taking care of mental health is just as important as physical health, as it helps us maintain balance and resilience.
             </p>
-            <Button variant="link" className="w-full sm:w-auto">
-              Explore all posts
-              <ArrowRight className="ml-2 size-4" />
-            </Button>
           </div>
           {userRole === 'admin' && <Button className='ml-auto' onClick={() => setOpened(true)}>Add article</Button>}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
@@ -118,7 +114,8 @@ export default function OrderModule() {
                     {post.summary}
                   </p>
                   <p className="flex items-center hover:underline">
-                    Read more
+
+                    <a href="https://www.befrienders.org.my/">Read more</a>
                     <ArrowRight className="ml-2 size-4" />
                   </p>
                 </div>

@@ -1,89 +1,147 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 
 const App: React.FC = () => {
   const [age, setAge] = useState<number>(20);
-  const [bpm, setBpm] = useState<number>(96);
-  const [pulse, setPulse] = useState<number>(0);
-  const [manualBpm, setManualBpm] = useState<number | null>(null);
+  const [clicks, setClicks] = useState<number[]>([]);
+  const [bpm, setBpm] = useState<number | null>(null);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   // Calculate HRmax
   const calculateHRmax = (age: number): number => 220 - age;
 
-  // Calculate BPM from HRmax
-  const calculateBPM = (age: number): number => {
-    const hrMax = calculateHRmax(age);
-    return Math.round(hrMax * 0.85);
-  };
-
-  // Handle Age Change
+  // Handle age input
   const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAge = parseInt(e.target.value, 10) || 0;
     setAge(newAge);
-    setBpm(calculateBPM(newAge));
   };
 
-  // Calculate Manual BPM
-  const handlePulseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPulse = parseInt(e.target.value, 10) || 0;
-    setPulse(newPulse);
-    setManualBpm(newPulse * 4); // BPM = pulse in 15 seconds * 4
+  // Handle pulse click
+  const handlePulseClick = () => {
+    const now = Date.now();
+
+    setClicks((prevClicks) => {
+      const updatedClicks = [...prevClicks, now];
+      const validClicks = updatedClicks.filter(
+        (timestamp) => now - timestamp <= 15000 // 15 seconds
+      );
+
+      // Calculate BPM if there are at least two clicks
+      if (validClicks.length > 1) {
+        const intervals = validClicks
+          .slice(1)
+          .map((time, index) => time - validClicks[index]);
+        const averageInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+
+        setBpm(Math.round((60 * 1000) / averageInterval)); // Calculate BPM
+      }
+
+      return validClicks;
+    });
+
+    if (timer) clearTimeout(timer);
+    setTimer(
+      setTimeout(() => {
+        setClicks([]);
+        setBpm(null);
+      }, 15000)
+    );
   };
 
-  const progressPercentage = Math.min((bpm / calculateHRmax(age)) * 100, 100);
+  // Handle spacebar click
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        handlePulseClick();
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
+  // Determine training zone
+  const calculateTrainingZone = (bpm: number | null): string => {
+    if (!bpm) return "Resting";
+    const hrMax = calculateHRmax(age);
+
+    if (bpm < 0.6 * hrMax) return "Resting";
+    if (bpm < 0.7 * hrMax) return "Fat Burning Zone";
+    if (bpm < 0.8 * hrMax) return "Cardio Zone";
+    return "Peak Zone";
+  };
+
+  const trainingZone = calculateTrainingZone(bpm);
 
   return (
-    <div className="container">
-      <h1>Heart Rate Calculator</h1>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div className="bg-white shadow-lg rounded-lg p-6 w-96 text-center">
+        <h1 className="text-2xl font-bold mb-4">Heart Rate Calculator</h1>
 
-      {/* Automatic HRmax and BPM Calculation */}
-      <div className="inputs">
-        <label htmlFor="age">Age</label>
-        <input
-          type="number"
-          id="age"
-          value={age}
-          onChange={handleAgeChange}
-          placeholder="Enter your age"
-        />
-      </div>
-      <div className="result">
-        <p>Your maximum heart rate is:</p>
-        <div className="hrmax">{calculateHRmax(age)}</div>
-        <p>Your average BPM is:</p>
-        <div className="bpm">{bpm}</div>
-      </div>
+        {/* Age Input */}
+        <div className="mb-6">
+          <label
+            htmlFor="age"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Enter your age:
+          </label>
+          <input
+            type="number"
+            id="age"
+            value={age}
+            onChange={handleAgeChange}
+            className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your age"
+          />
+        </div>
 
-      {/* Manual BPM Calculation */}
-      <div className="manual-calculation">
-        <h2>Manual Heart Rate Calculation</h2>
-        <label htmlFor="pulse">Enter your pulse (15 seconds):</label>
-        <input
-          type="number"
-          id="pulse"
-          value={pulse}
-          onChange={handlePulseChange}
-          placeholder="Enter pulse count"
-        />
-        {manualBpm !== null && (
-          <div className="manual-result">
-            <p>Your heart rate is:</p>
-            <div className="manual-bpm">{manualBpm} BPM</div>
+        {/* Pulse Clicking Section */}
+        <div className="mb-6">
+          <p className="text-sm text-gray-600 mb-2">
+            Click the heart or press the spacebar each time you feel a pulse:
+          </p>
+          <button
+            onClick={handlePulseClick}
+            className="text-5xl text-red-500 hover:text-red-600 transition duration-300"
+          >
+            ❤️
+          </button>
+        </div>
+
+        {/* BPM Result */}
+        <div className="mb-6">
+          <p className="text-sm text-gray-600">Your average BPM:</p>
+          <div className="text-4xl font-bold text-blue-500">
+            {bpm !== null ? bpm : "--"}
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* Progress Bar */}
-      <div className="progress-bar">
-        <div
-          className="bar"
-          style={{ width: `${progressPercentage}%` }}
-        ></div>
+        {/* Training Zone */}
+        <div className="mb-4">
+          <p className="text-sm text-gray-600">Training Zone:</p>
+          <div
+            className={`px-4 py-2 rounded-lg font-bold ${
+              trainingZone === "Resting"
+                ? "bg-blue-100 text-blue-600"
+                : trainingZone === "Fat Burning Zone"
+                ? "bg-yellow-100 text-yellow-600"
+                : trainingZone === "Cardio Zone"
+                ? "bg-orange-100 text-orange-600"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {trainingZone}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 export default App;
+
 
 
