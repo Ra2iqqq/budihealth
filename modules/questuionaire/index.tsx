@@ -5,9 +5,11 @@ import { useDisclosure } from '@mantine/hooks';
 import { format, parseISO } from 'date-fns';
 import { ordersTypes } from '@/schema/orders';
 import createClient from '@/utils/pocketbase/api';
+import { quizsTypes } from '@/schema/quizs';
 
 export default function QuestuinaireModule() {
     const pb = createClient();
+    const [topics, setTopics] = useState<quizsTypes[]>();
     const userRole = pb.authStore.model?.role;
     const router = useRouter();
     const [orders, setOrders] = useState<ordersTypes[]>();
@@ -15,15 +17,23 @@ export default function QuestuinaireModule() {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const Topics = [
-        {
-            name: 'GAD-7',
-        },
-        {
-            name: 'PHQ-9',
-        },
-      
-    ]
+    const fetchQuizs = async () => {
+        try {
+            const records = await pb.collection('quizs').getFullList<quizsTypes>({
+                sort: '-created',
+            });
+
+            if (records) {
+                setTopics(records)
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchQuizs()
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -122,11 +132,11 @@ export default function QuestuinaireModule() {
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                                        {Topics?.map((topic, index) =>
-                                            <tr key={index} className='cursor-pointer hover:bg-slate-50'>
+                                        {topics?.map((topic, index) =>
+                                            <tr key={index} className='cursor-pointer hover:bg-slate-50' onClick={() => router.push(`/questuionnaire/${topic.id}`)}>
                                                 <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                                     <div className="inline-flex items-center gap-x-3">
-                                                        <span>{topic.name}</span>
+                                                        <span>{topic.title}</span>
                                                     </div>
                                                 </td>
                                             </tr>
